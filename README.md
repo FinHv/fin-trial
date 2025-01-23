@@ -1,7 +1,7 @@
 # **fin-trial**
 
 **fin-trial** is a Node.js application that monitors and manages user quotas and trials in a `glftpd`/IRC environment.
-
+Its in testing phase so if you want something new or report a bug let me know. 
 ---
 
 ## **Features**
