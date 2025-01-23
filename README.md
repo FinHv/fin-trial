@@ -42,6 +42,26 @@
 <@BOT> [ 2 ] name/iND ( 84.4GB Up ) is currently FAILING.
 ```
 
+## **Install**
+
+easy is to install nvm:  https://github.com/nvm-sh/nvm?tab=readme-ov-file#install--update-script
+
+then run ```nvm install node```
+
+after that cd into the app root directory:
+
+```cd /glftpd/fin-trial```
+
+type 
+```npm install```
+
+u are now ready to start the app. (run it in a screen session or make a service etc..) 
+
+``` node main.js ```    
+
+Use this if you get some ssl error 
+```node --openssl-legacy-provider main.js```
+
 
 ## **Staff Commands (`!ft`)**
 
@@ -96,6 +116,24 @@ Available **only** in staff channels for authorized users.
 <@BOT> User JohnDoe marked for deletion.
 ```
 
+Top uploaders of the day: 
+The bot will also show the top 10 uploaders in a interval (see config) in specified channel
+```
+<@BOT> TOP UPLOADERS FOR THE DAY: 10 Users
+<@BOT> 01 shadowhawk - (1531 Files) - (119.7GB)
+<@BOT> 02 pixelmaster - (617 Files) - (105.3GB)
+<@BOT> 03 blaze - (564 Files) - (61.5GB)
+<@BOT> 04 nightwolf - (831 Files) - (60.1GB)
+<@BOT> 05 crimson - (815 Files) - (51.3GB)
+<@BOT> 06 techie - (433 Files) - (34.3GB)
+<@BOT> 07 skywalker - (329 Files) - (31.3GB)
+<@BOT> 08 ghost - (624 Files) - (27.0GB)
+<@BOT> 09 sentinel - (113 Files) - (21.2GB)
+<@BOT> 10 thunderbolt - (256 Files) - (16.5GB)
+<@BOT> TOTAL UPLOADS FOR THE DAY: 6113 Files - 528.4GB
+```
+
+
 When you run it: 
 ``` node --openssl-legacy-provider main.js ```
 It will create a sqlite database and every user is put on quota default and it updates the sqlite every x minutes. So if you fuck it up, you can just delete the database file and run again.  (see config to exlude users/groups) If you want to put user on trial do the command above. 
@@ -105,7 +143,7 @@ The application connects to a znc server so create a new user, connect it to you
 connectstring:  username/network:password
 
 
-example configuration:
+Edit config.json, it looks like this! 
 ```
 {
   "server": {
@@ -152,20 +190,5 @@ example configuration:
 }
 ```
 
-Top uploaders of the day: 
-The bot will also show the top 10 uploaders in a interval (see config) in specified channel
-```
-<@BOT> TOP UPLOADERS FOR THE DAY: 10 Users
-<@BOT> 01 shadowhawk - (1531 Files) - (119.7GB)
-<@BOT> 02 pixelmaster - (617 Files) - (105.3GB)
-<@BOT> 03 blaze - (564 Files) - (61.5GB)
-<@BOT> 04 nightwolf - (831 Files) - (60.1GB)
-<@BOT> 05 crimson - (815 Files) - (51.3GB)
-<@BOT> 06 techie - (433 Files) - (34.3GB)
-<@BOT> 07 skywalker - (329 Files) - (31.3GB)
-<@BOT> 08 ghost - (624 Files) - (27.0GB)
-<@BOT> 09 sentinel - (113 Files) - (21.2GB)
-<@BOT> 10 thunderbolt - (256 Files) - (16.5GB)
-<@BOT> TOTAL UPLOADS FOR THE DAY: 6113 Files - 528.4GB
-```
+
 
