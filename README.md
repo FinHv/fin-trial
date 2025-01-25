@@ -134,27 +134,31 @@ The bot will also show the top 10 uploaders in a interval (see config) in specif
 ```
 
 
-When you run it: 
+When you run it:
+ 
 ``` node --openssl-legacy-provider main.js ```
-It will create a sqlite database and every user is put on quota default and it updates the sqlite every x minutes. So if you fuck it up, you can just delete the database file and run again.  (see config to exlude users/groups) If you want to put user on trial do the command above. 
-Its not needed to edit anything on the glftpd site. Ive build the bot so it will also responds to commands. (u can add your own commands if you want! See irc.js
 
-The application connects to a znc server so create a new user, connect it to your channels and add the znc connection string in the config. 
-connectstring:  username/network:password
+The script will create a SQLite database, and by default, every user will be put on a quota. The database updates every *x* minutes. If something goes wrong, you can simply delete the database file and run the script again. (See the configuration file to exclude specific users or groups.) 
 
+To put a user on trial, use the appropriate command mentioned above. 
+
+There is no need to edit anything on the glFTPd site. The bot is built to respond to commands, and you can add your own commands if needed! Check out `irc.js` for details.
+
+The application connects to a ZNC server, so you need to create a new user, connect it to your channels, and add the ZNC connection string in the configuration:
+```connectstring: username/network:password```
 
 Edit config.json, it looks like this! 
 ```
 {
   "server": {
     "host": "",
-    "port": 1337,
+    "port": 5050,
     "ssl": true,
-    "nickname": "BOT",
-    "connectstring": "ST4TB0T/ninja:password",   
+    "nickname": "NiNJA",
+    "connectstring": "NinjaB0T/ninja:cowabanga!",
     "channels": [
-     { "name": "#chan-chat", "blowfishKey": "ihihhiuhiu75r6dtsey54syr" },
-      { "name": "#chan", "blowfishKey": "ihihhiuhiu75r6dtsey54syr" }
+      { "name": "#NiNJA-chat", "blowfishKey": "somecbckey" },
+      { "name": "#NiNJA", "blowfishKey": "somecbckey" }
     ]
   },
   "paths": {
@@ -167,13 +171,13 @@ Edit config.json, it looks like this!
     "updateInterval": 300000,
     "userSkip":  ["default.user", "NUKEBOT", "glftpd"],
     "excludedGroups": ["Admin", "SiteOP", "Friends", "Leech", "NUKERS", "NoGroup"],
-    "announceTopDayChan": ["#chan-chat"],
-    "BlowfishKeyTopDayChan": "ihihhiuhiu75r6dtsey54syr",
+    "announceTopDayChan": ["#NiNJA-chat"],
+    "BlowfishKeyTopDayChan": "somecbckey",
     "showTopDayUp": true,
     "showTopDayUpInterval": 28800000,
-    "staffUsers": ["username","otheruser"],
-    "staffChan": ["#chan-staff"],
-    "blowfishKeyStaffChan": "ihihhiuhiu75r6dtsey54syr"
+    "staffUsers": ["ninja","otheruser"],
+    "staffChan": ["#NiNJA-staff"],
+    "blowfishKeyStaffChan": "somecbckey"
   },
   "trialConfig": {
     "quotaGB": "150",
