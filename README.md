@@ -1,12 +1,12 @@
 # **fin-trial**
 
-**fin-trial** is a Node.js application that monitors and manages user quotas and trials in a `glftpd`/IRC environment.
+**fin-trial** is a Node.js application that monitors and manages user quotas and trials in a `glFTPd`/IRC environment.
 Its in testing phase so if you want something new or report a bug let me know. 
 ---
 
 ## **Features**
 
-- **User Management**: Manage user statuses (`Quota`, `Trial`, and `Deletion`) directly via IRC commands.
+- **User Management**: Manage user statuses (`Quota`, `Trial`, and `Deletion`) directly via IRC commands. (it reads the user files of glFTPd)
 - **Quota Monitoring**: Automatically monitor and reset user quotas on a weekly basis.
 - **Trial Monitoring**: Track and manage users during their trial period.
 - **Daily Reports**: Generate and announce daily reports of top uploaders for specified channels.
