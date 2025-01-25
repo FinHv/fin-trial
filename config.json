@@ -1,0 +1,43 @@
+{
+  "server": {
+    "host": "",
+    "port": 5050,
+    "ssl": true,
+    "nickname": "NiNJA",
+    "connectstring": "NinjaB0T/ninja:cowabanga!",
+    "channels": [
+      { "name": "#NiNJA-chat", "blowfishKey": "somecbckey" },
+      { "name": "#NiNJA", "blowfishKey": "somecbckey" }
+    ]
+  },
+  "paths": {
+    "usersDir": "/glftpd/ftp-data/users",
+    "byeFiles": "/glftpd/ftp-data/byefiles",
+    "msgs": "/glftpd/ftp-data/msgs",
+    "databaseFile": "user_stats.db"
+  },
+  "settings": {
+    "updateInterval": 300000,
+    "userSkip":  ["default.user", "NUKEBOT", "glftpd"],
+    "excludedGroups": ["Admin", "SiteOP", "Friends", "Leech", "NUKERS", "NoGroup"],
+    "announceTopDayChan": ["#NiNJA-chat"],
+    "BlowfishKeyTopDayChan": "somecbckey",
+    "showTopDayUp": true,
+    "showTopDayUpInterval": 28800000,
+    "staffUsers": ["ninja","otheruser"],
+    "staffChan": ["#NiNJA-staff"],
+    "blowfishKeyStaffChan": "somecbckey"
+  },
+  "trialConfig": {
+    "quotaGB": "150",
+    "daysDefault": 7,
+    "enabled": true,
+    "failSetFlagsTrial": "6"
+  },
+  "quotaConfig": {
+    "quotaGB": "250",
+    "enabled": true,
+    "failSetFlagsQuota": "6",
+    "failBackToTrial": true
+  }
+}
