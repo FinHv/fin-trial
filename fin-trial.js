@@ -16,10 +16,10 @@ const config = require('./config.json');
       console.log(`[INFO] Updating user stats...`);
       await updateUserStats(db);
 
-      console.log(`[INFO] Processing trial users...`);
+      //console.log(`[INFO] Processing trial users...`);
       await processTrials(db);
 
-      console.log(`[INFO] Processing quota users...`);
+      //console.log(`[INFO] Processing quota users...`);
       await processQuotas(db);
     } catch (error) {
       console.error(`[ERROR] Failed during periodic processing:`, error.message);

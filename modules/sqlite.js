@@ -25,7 +25,8 @@ const connect = async () => {
       passed_trial INTEGER DEFAULT 0, -- 0 = NOT PASSED TRIAL, 1 = PASSED TRIAL
       days_remaining INTEGER DEFAULT NULL, -- Days remaining for trial or quota
       day_files INTEGER DEFAULT 0, -- Files uploaded in a day
-      wkup_files INTEGER DEFAULT 0 -- Total files uploaded
+      wkup_files INTEGER DEFAULT 0, -- Total files uploaded
+      trial_start_date INTEGER DEFAULT NULL -- Start date of trial as UNIX time
     );
   `);
 

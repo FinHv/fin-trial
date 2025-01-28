@@ -1,7 +1,7 @@
 const tls = require('tls');
 const { fishDecrypt, fishEncrypt } = require('./fish');
-const { sendCommand } = require('./utils');
-const { getTopUploaders, updateUserStatus, generateCombinedReport } = require('./quota');
+const { sendCommand, updateUserStatus, getTopUploaders } = require('./utils');
+const { generateCombinedReport } = require('./quota');
 const { scheduleDayUploadReport } = require('./topup');
 const fileOps = require('./fileoperations');
 const config = require('../config.json');
@@ -164,31 +164,64 @@ const startBot = (db) => {
             continue;
           }
 
-          try {
-            if (command === 'trial') {
-              await db.run(`UPDATE user_stats SET status = ? WHERE username = ?`, [STATUS_TRIAL, username]);
-              sendCommand(socket, `PRIVMSG ${channel} :${fishEncrypt(`User ${username} updated to trial.`, blowfishKey)}`);
-            } else if (command === 'quota') {
-              await db.run(`UPDATE user_stats SET status = ? WHERE username = ?`, [STATUS_QUOTA, username]);
-              sendCommand(socket, `PRIVMSG ${channel} :${fishEncrypt(`User ${username} updated to quota.`, blowfishKey)}`);
-            } else if (command === 'extend') {
-              const daysToAdd = parseInt(argument, 10);
-              if (isNaN(daysToAdd)) {
-                sendCommand(socket, `PRIVMSG ${channel} :${fishEncrypt('Invalid number of days.', blowfishKey)}`);
-                continue;
-              }
-              await db.run(`UPDATE user_stats SET days_remaining = days_remaining + ? WHERE username = ?`, [daysToAdd, username]);
-              sendCommand(socket, `PRIVMSG ${channel} :${fishEncrypt(`User ${username}'s period extended by ${daysToAdd} days.`, blowfishKey)}`);
-            } else if (command === 'delete') {
-              const userFilePath = `${config.paths.usersDir}/${username}`;
-              fileOps.appendFlagsToUserFile(userFilePath, '6', '/tmp');
-              sendCommand(socket, `PRIVMSG ${channel} :${fishEncrypt(`User ${username} marked for deletion.`, blowfishKey)}`);
-            } else {
-              sendCommand(socket, `PRIVMSG ${channel} :${fishEncrypt('Invalid command. Use "trial", "quota", "extend", or "delete".', blowfishKey)}`);
-            }
-          } catch (error) {
-            logWithTimestamp('ERROR', `Failed to process command ${command} for ${username}: ${error.message}`);
-          }
+try {
+
+
+if (command === 'trial') {
+  const nowUnix = Math.floor(Date.now() / 1000); // Current time in Unix timestamp format
+
+  await db.run(`
+    UPDATE user_stats
+    SET status = ?, passed_trial = ?, days_remaining = ?, trial_start_date = ?, last_updated = CURRENT_TIMESTAMP
+    WHERE username = ?;
+  `, [STATUS_TRIAL, 0, config.trialConfig.daysDefault, nowUnix, username]);
+
+  const trialStartDateISO = new Date(nowUnix * 1000).toISOString();
+
+  sendCommand(
+    socket,
+    `PRIVMSG ${channel} :${fishEncrypt(
+      `User ${username} updated to trial with ${config.trialConfig.daysDefault} days. Trial start date has been set to ${trialStartDateISO}.`,
+      blowfishKey
+    )}`
+  );
+  logWithTimestamp('INFO', `User ${username} updated to trial. Trial start date: ${trialStartDateISO}`);
+} else if (command === 'quota') {
+    // Update the user's status to quota
+    await updateUserStatus(db, username, STATUS_QUOTA, true, null, 'Manual action via !ft quota');
+    sendCommand(socket, `PRIVMSG ${channel} :${fishEncrypt(`User ${username} updated to quota.`, blowfishKey)}`);
+  } else if (command === 'extend') {
+    const daysToReplace = parseInt(argument, 10);
+    if (isNaN(daysToReplace) || daysToReplace <= 0) {
+      sendCommand(socket, `PRIVMSG ${channel} :${fishEncrypt('Invalid number of days. Please specify a positive integer.', blowfishKey)}`);
+      continue;
+    }
+
+    // Update the trial period with the specified number of days and reset the trial start date
+    const nowUnix = Math.floor(Date.now() / 1000); // Current Unix timestamp
+    const trialStartDateISO = new Date(nowUnix * 1000).toISOString();
+
+    await db.run(`
+      UPDATE user_stats
+      SET days_remaining = ?, trial_start_date = ?, last_updated = CURRENT_TIMESTAMP
+      WHERE username = ? AND status = ?;
+    `, [daysToReplace, nowUnix, username, STATUS_TRIAL]);
+
+    sendCommand(socket, `PRIVMSG ${channel} :${fishEncrypt(`User ${username}'s trial updated to ${daysToReplace} days remaining. Trial start date has been reset to ${trialStartDateISO}.`, blowfishKey)}`);
+    logWithTimestamp('INFO', `User ${username} trial updated to ${daysToReplace} days. New trial start date: ${trialStartDateISO}`);
+  } else if (command === 'delete') {
+    const userFilePath = path.join(config.paths.usersDir, username);
+    const tmpDir = path.join(config.paths.tmpDir, `${username}.tmp`);
+    await fileOps.appendFlagsToUserFile(userFilePath, '6', tmpDir);
+    sendCommand(socket, `PRIVMSG ${channel} :${fishEncrypt(`User ${username} marked for deletion.`, blowfishKey)}`);
+  } else {
+    sendCommand(socket, `PRIVMSG ${channel} :${fishEncrypt('Invalid command. Use "trial", "quota", "extend", or "delete".', blowfishKey)}`);
+  }
+} catch (error) {
+  logWithTimestamp('ERROR', `Failed to process command ${command} for ${username}: ${error.message}`);
+}
+
+
         }
       }
     }
@@ -203,7 +236,6 @@ const startBot = (db) => {
       });
     });
   }
-
 
   return socket;
 };
