@@ -57,11 +57,12 @@ type
 
 u are now ready to start the app. (run it in a screen session or make a service etc..) 
 
-``` node main.js ```    
+``` node fin-trial.js ```    
 
-Use this if you get some ssl error 
-```node --openssl-legacy-provider main.js```
+Run this if you get some ssl error 
+```node --openssl-legacy-provider fin-trial.js```
 
+Or downgrade nodejs with nvm. 
 
 ## **Staff Commands (`!ft`)**
 
