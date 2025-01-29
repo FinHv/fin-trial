@@ -165,7 +165,8 @@ Edit config.json, it looks like this!
     "usersDir": "/glftpd/ftp-data/users",
     "byeFiles": "/glftpd/ftp-data/byefiles",
     "msgs": "/glftpd/ftp-data/msgs",
-    "databaseFile": "user_stats.db"
+    "databaseFile": "user_stats.db",
+    "tmpDir": "/glftpd/tmp"
   },
   "settings": {
     "updateInterval": 300000,
